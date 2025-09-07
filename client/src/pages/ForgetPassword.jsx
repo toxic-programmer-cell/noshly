@@ -3,6 +3,7 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
+import { ClipLoader } from "react-spinners";
 
 const ForgetPassword = () => {
   const [step, setStep] = useState(1);
@@ -11,32 +12,42 @@ const ForgetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+  const [err, setErr] = useState("");
+  const [loding, setLoding] = useState(false);
 
   const handleSendOtp = async () => {
     try {
+      setLoding(true);
       const result = await axios.post(
         `${serverUrl}/api/auth/send-otp`,
         { email },
         { withCredentials: true }
       );
+      setLoding(false);
       console.log(result);
+      setErr("");
       setStep(2);
     } catch (error) {
-      console.log(error);
+      setLoding(false);
+      setErr(error?.response?.data?.message);
     }
   };
 
   const handleVerifyOtp = async () => {
     try {
+      setLoding(true);
       const result = await axios.post(
         `${serverUrl}/api/auth/verify-otp`,
         { email, otp },
         { withCredentials: true }
       );
+      setLoding(false);
       console.log(result);
+      setErr("");
       setStep(3);
     } catch (error) {
-      console.log(error);
+      setLoding(false);
+      setErr(error?.response?.data?.message);
     }
   };
 
@@ -44,16 +55,20 @@ const ForgetPassword = () => {
     if (newPassword !== confirmPassword) {
       return null;
     }
+    setLoding(true);
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/reset-password`,
         { email, newPassword },
         { withCredentials: true }
       );
+      setLoding(false);
       console.log(result);
+      setErr("");
       navigate("/signin");
     } catch (error) {
-      console.log(error);
+      setLoding(false);
+      setErr(error?.response?.data?.message);
     }
   };
   return (
@@ -91,8 +106,9 @@ const ForgetPassword = () => {
               className={`w-full font-semibold py-2 rounded-lg transition duration-200 cursor-pointer bg-[#ff4d2d] text-white hover:bg-[#e64323]`}
               onClick={handleSendOtp}
             >
-              Send otp
+              {loding ? <ClipLoader size={20} /> : "Send OTP"}
             </button>
+            {err && <p className="text-red-500 text-center">*{err}*</p>}
           </div>
         )}
         {/* step-2 */}
@@ -117,8 +133,9 @@ const ForgetPassword = () => {
               className={`w-full font-semibold py-2 rounded-lg transition duration-200 cursor-pointer bg-[#ff4d2d] text-white hover:bg-[#e64323]`}
               onClick={handleVerifyOtp}
             >
-              Verify
+              {loding ? <ClipLoader size={20} /> : "Verify"}
             </button>
+            {err && <p className="text-red-500 text-center">*{err}*</p>}
           </div>
         )}
 
@@ -159,8 +176,9 @@ const ForgetPassword = () => {
               className={`w-full font-semibold py-2 rounded-lg transition duration-200 cursor-pointer bg-[#ff4d2d] text-white hover:bg-[#e64323]`}
               onClick={handleResetPassword}
             >
-              Reset Password
+              {loding ? <ClipLoader size={20} /> : "Reset Password"}
             </button>
+            {err && <p className="text-red-500 text-center">*{err}*</p>}
           </div>
         )}
       </div>

@@ -47,6 +47,10 @@ export const signUp = async (req, res) => {
 export const signIn = async (req, res) => {
   try {
     const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "User Does not exist" });
@@ -84,6 +88,9 @@ export const sendOtp = async (req, res) => {
   try {
     console.log(req.body);
     const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
     const user = await User.findOne({ email });
     console.log(user);
     if (!user) {
@@ -105,6 +112,9 @@ export const sendOtp = async (req, res) => {
 export const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
+    if (!otp) {
+      return res.status(400).json({ message: "OTP is required" });
+    }
     const user = await User.findOne({ email });
     if (!user || user.resetOtp !== otp || user.otpExpires < Date.now()) {
       return res.status(400).json({ message: " Invalid or Expire OTP" });
@@ -133,5 +143,31 @@ export const resetPassword = async (req, res) => {
     return res.status(200).json({ message: "Password reset successfully" });
   } catch (error) {
     return res.status(500).json(`Reset password error ${error}`);
+  }
+};
+
+export const googleAuth = async (req, res) => {
+  try {
+    const { fullName, email, mobile, role } = req.body;
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({
+        fullName,
+        email,
+        mobile,
+        role,
+      });
+    }
+    const token = await generateToken(user._id);
+    res.cookie("token", token, {
+      secure: false,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+
+    return res.status(201).json(user);
+  } catch (error) {
+    return res.status(500).json(`Google auth error ${error}`);
   }
 };

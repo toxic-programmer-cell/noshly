@@ -5,11 +5,16 @@ import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
+import { ClipLoader } from "react-spinners";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
+  const [loding, setLoding] = useState(false);
 
   const primaryColor = "#ff4d2d";
   const hoverColor = "#e64323";
@@ -19,15 +24,46 @@ const SignIn = () => {
   const navigate = useNavigate();
 
   const handleSignIn = async () => {
+    setLoding(true);
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signin`,
         { email, password },
         { withCredentials: true }
       );
+      setLoding(false);
       console.log(result);
-    } catch (err) {
-      console.log(err);
+      setErr("");
+    } catch (error) {
+      setLoding(false);
+      setErr(error?.response?.data?.message);
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    setLoding(true);
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    // console.log(result);
+    try {
+      const { data } = await axios.post(
+        `${serverUrl}/api/auth/google-auth`,
+        {
+          email: result?.user?.email,
+        },
+        { withCredentials: true }
+      );
+      setLoding(false);
+      console.log(data);
+      setErr("");
+    } catch (error) {
+      if (error.code === "auth/popup-closed-by-user") {
+        setErr("You closed the Google login popup before finishing.");
+      } else {
+        setErr(error?.response?.data?.message || "Google login failed.");
+      }
+    } finally {
+      setLoding(false); // always runs
     }
   };
   return (
@@ -63,6 +99,7 @@ const SignIn = () => {
             style={{ border: `1px solid ${borderColor}` }}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
+            required
           />
         </div>
 
@@ -83,6 +120,7 @@ const SignIn = () => {
               style={{ border: `1px solid ${borderColor}` }}
               onChange={(e) => setPassword(e.target.value)}
               value={password}
+              required
             />
             <button
               className="absolute right-3 top-3.5 text-gray-500 cursor-pointer"
@@ -104,10 +142,20 @@ const SignIn = () => {
           className={`w-full font-semibold py-2 rounded-lg transition duration-200 cursor-pointer bg-[#ff4d2d] text-white hover:bg-[#e64323]`}
           onClick={handleSignIn}
         >
-          Sign In
+          {loding ? <ClipLoader size={20} /> : "Sign In"}
         </button>
-        <button className="w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition duration-200 border-gray-400 hover:bg-gray-200 cursor-pointer">
-          <FcGoogle size={20} /> <span>Sign in with Google</span>
+        {err && <p className="text-red-500 text-center">*{err}*</p>}
+        <button
+          className="w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition duration-200 border-gray-400 hover:bg-gray-200 cursor-pointer"
+          onClick={handleGoogleAuth}
+        >
+          {loding ? (
+            <ClipLoader size={20} />
+          ) : (
+            <div className="flex items-center gap-2">
+              <FcGoogle size={20} /> <span>Sign in with Google</span>
+            </div>
+          )}
         </button>
         <p className="text-center mt-2">
           Create new account ?{" "}
