@@ -8,6 +8,8 @@ import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
 import { ClipLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,6 +24,7 @@ const SignIn = () => {
   const borderColor = "#ddd";
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSignIn = async () => {
     setLoding(true);
@@ -32,7 +35,7 @@ const SignIn = () => {
         { withCredentials: true }
       );
       setLoding(false);
-      console.log(result);
+      dispatch(setUserData(result.data));
       setErr("");
     } catch (error) {
       setLoding(false);
@@ -54,7 +57,7 @@ const SignIn = () => {
         { withCredentials: true }
       );
       setLoding(false);
-      console.log(data);
+      dispatch(setUserData(data));
       setErr("");
     } catch (error) {
       if (error.code === "auth/popup-closed-by-user") {
