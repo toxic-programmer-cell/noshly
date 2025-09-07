@@ -65,7 +65,7 @@ export const signIn = async (req, res) => {
       httpOnly: true,
     });
 
-    return res.status(200).json(user);
+    return res.status(200).json({ message: "login successfully", user });
   } catch (error) {
     return res.status(500).json("sign in error", error);
   }
@@ -82,8 +82,10 @@ export const signOut = async (req, res) => {
 
 export const sendOtp = async (req, res) => {
   try {
+    console.log(req.body);
     const { email } = req.body;
     const user = await User.findOne({ email });
+    console.log(user);
     if (!user) {
       return res.status(400).json({ message: "User does not exist" });
     }
@@ -95,6 +97,7 @@ export const sendOtp = async (req, res) => {
     await sendOtpMail(email, otp);
     return res.status(200).json({ message: "OTP send successfully" });
   } catch (err) {
+    console.error("❌ Send OTP error:", err);
     return res.status(500).json(`Send OTP error ${err}`);
   }
 };

@@ -5,7 +5,7 @@ import axios from "axios";
 import { serverUrl } from "../App";
 
 const ForgetPassword = () => {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -100,13 +100,13 @@ const ForgetPassword = () => {
           <div className="mt-4">
             <div className="mb-4">
               <label
-                htmlFor="email"
+                htmlFor="otp"
                 className="block text-gray-700 font-medium mb-1"
               >
                 OTP
               </label>
               <input
-                type="email"
+                type="text"
                 className="w-full border-[1px] border-gray-200 rounded-lg py-2 px-3 focus:outline-none "
                 placeholder="Enter OTP"
                 onChange={(e) => setOtp(e.target.value)}
@@ -133,7 +133,7 @@ const ForgetPassword = () => {
                 New Password
               </label>
               <input
-                type="email"
+                type="text"
                 className="w-full border-[1px] border-gray-200 rounded-lg py-2 px-3 focus:outline-none "
                 placeholder="Enter New Password"
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -148,7 +148,7 @@ const ForgetPassword = () => {
                 Confirm Password
               </label>
               <input
-                type="email"
+                type="text"
                 className="w-full border-[1px] border-gray-200 rounded-lg py-2 px-3 focus:outline-none "
                 placeholder="Confirm Password"
                 onChange={(e) => setConfirmPassword(e.target.value)}
