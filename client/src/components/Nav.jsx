@@ -3,16 +3,34 @@ import { useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoMdSearch } from "react-icons/io";
 import { IoCartOutline } from "react-icons/io5";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
+import axios from "axios";
+import { serverUrl } from "../App";
+import { setUserData } from "../redux/userSlice";
+import { FiPlus } from "react-icons/fi";
+import { MdOutlinePendingActions } from "react-icons/md";
 
 const Nav = () => {
   const { userData, city } = useSelector((state) => state.user);
+  const { myShopData } = useSelector((state) => state.owner);
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    try {
+      const result = await axios.get(`${serverUrl}/api/auth/signout`, {
+        withCredentials: true,
+      });
+      dispatch(setUserData(null));
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="w-full h-[80px] flex items-center justify-between md:justify-center gap-[30px] px-[20px] fixed top-0 z-[9999] bg-[#fff9f6] overflow-visible">
-      {showSearch && (
+      {showSearch && userData.role == "user" && (
         <div className="w-[90%] h-[70px] bg-white shadow-xl rounded-lg items-center gap-[20px] flex top-[80px] left-[5%] fixed">
           <div className=" flex items-center w-[30%] overflow-hidden gap-[10px] px-[10px] border-r-[2px] border-gray-400">
             <FaLocationDot size={20} className="text-[#ff4d2d]" />
@@ -30,44 +48,83 @@ const Nav = () => {
       )}
 
       <h1 className="text-3xl font-bold mb-2 text-[#ff4d2d]">Noshly</h1>
-      <div className="md:w-[60%] lg:w-[40%] h-[70px] bg-white shadow-xl rounded-lg items-center gap-[20px] hidden md:flex">
-        <div className=" flex items-center w-[30%] overflow-hidden gap-[10px] px-[10px] border-r-[2px] border-gray-400">
-          <FaLocationDot size={20} className="text-[#ff4d2d]" />
-          <div className="w-[80%] truncate text-gray-600">{city}</div>
+
+      {userData.role == "user" && (
+        <div className="md:w-[60%] lg:w-[40%] h-[70px] bg-white shadow-xl rounded-lg items-center gap-[20px] hidden md:flex">
+          <div className=" flex items-center w-[30%] overflow-hidden gap-[10px] px-[10px] border-r-[2px] border-gray-400">
+            <FaLocationDot size={20} className="text-[#ff4d2d]" />
+            <div className="w-[80%] truncate text-gray-600">{city}</div>
+          </div>
+          <div className="flex items-center gap-[10px] w-[80%]">
+            <IoMdSearch size={25} className="text-[#ff4d2d]" />
+            <input
+              type="text"
+              placeholder="Search food..."
+              className="w-full px-[10px] text-gray-600 outline-0"
+            />
+          </div>
         </div>
-        <div className="flex items-center gap-[10px] w-[80%]">
-          <IoMdSearch size={25} className="text-[#ff4d2d]" />
-          <input
-            type="text"
-            placeholder="Search food..."
-            className="w-full px-[10px] text-gray-600 outline-0"
-          />
-        </div>
-      </div>
+      )}
+
       <div className="flex gap-[20px] items-center justify-center">
-        {showSearch ? (
-          <RxCross2
-            size={25}
-            className="text-[#ff4d2d] md:hidden cursor-pointer"
-            onClick={() => setShowSearch((prev) => !prev)}
-          />
+        {userData.role == "user" &&
+          (showSearch ? (
+            <RxCross2
+              size={25}
+              className="text-[#ff4d2d] md:hidden cursor-pointer"
+              onClick={() => setShowSearch((prev) => !prev)}
+            />
+          ) : (
+            <IoMdSearch
+              size={25}
+              className="text-[#ff4d2d] md:hidden cursor-pointer"
+              onClick={() => setShowSearch((prev) => !prev)}
+            />
+          ))}
+
+        {userData.role == "owner" ? (
+          <>
+            {myShopData && (
+              <>
+                <button className="hidden md:flex items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d]">
+                  <FiPlus size={20} />
+                  <span>Add Food Items</span>
+                </button>
+                <button className="flex md:hidden items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d]">
+                  <FiPlus size={20} />
+                </button>
+              </>
+            )}
+
+            <div className="hidden md:flex items-center gap-2 relative px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] font-medium">
+              <MdOutlinePendingActions size={20} />
+              <span>My Orders</span>
+              <span className="absolute -right-2 -top-2 text-xs font-bold text-white bg-[#ff4d2d] rounded-full px-[6px] py-[1px]">
+                0
+              </span>
+            </div>
+            <div className="md:hidden flex items-center gap-2 relative px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] font-medium">
+              <MdOutlinePendingActions size={20} />
+              <span className="absolute -right-2 -top-2 text-xs font-bold text-white bg-[#ff4d2d] rounded-full px-[6px] py-[1px]">
+                0
+              </span>
+            </div>
+          </>
         ) : (
-          <IoMdSearch
-            size={25}
-            className="text-[#ff4d2d] md:hidden cursor-pointer"
-            onClick={() => setShowSearch((prev) => !prev)}
-          />
+          <>
+            <div className="relative cursor-pointer">
+              <IoCartOutline size={30} className="text-[#ff4d2d]" />
+              <span className="absolute right-[-9px] top-[-12px] text-[#ff4d2d]">
+                0
+              </span>
+            </div>
+
+            <button className="hidden md:block px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium">
+              My Orders
+            </button>
+          </>
         )}
 
-        <div className="relative cursor-pointer">
-          <IoCartOutline size={30} className="text-[#ff4d2d]" />
-          <span className="absolute right-[-9px] top-[-12px] text-[#ff4d2d]">
-            0
-          </span>
-        </div>
-        <button className="hidden md:block px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium">
-          My Orders
-        </button>
         <div
           className="w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#ff4d2d] text-white text-[18px] shadow-xl font-semibold  cursor-pointer uppercase"
           onClick={() => setShowInfo((prev) => !prev)}
@@ -80,7 +137,10 @@ const Nav = () => {
             <div className="text-[#ff4d2d] font-semibold cursor-pointer md:hidden">
               My Orders
             </div>
-            <div className="text-[#ff4d2d] font-semibold cursor-pointer">
+            <div
+              className="text-[#ff4d2d] font-semibold cursor-pointer"
+              onClick={handleLogout}
+            >
               Log Out
             </div>
           </div>
