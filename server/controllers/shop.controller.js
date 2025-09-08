@@ -3,6 +3,8 @@ import { Shop } from "../models/shop.model.js";
 
 export const createAndEditShop = async (req, res) => {
   try {
+    console.log(req.body);
+    console.log("File:", req.file);
     const { name, city, state, address } = req.body;
     let image;
     if (req.file) {
