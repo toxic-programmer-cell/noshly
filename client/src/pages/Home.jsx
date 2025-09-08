@@ -6,7 +6,7 @@ import DeliveryBoyDashboard from "../components/DeliveryBoyDashboard";
 
 const Home = () => {
   const { userData } = useSelector((state) => state.user);
-  console.log(userData.role);
+  // console.log(userData.role);
   return (
     <div className="w-[100vw] min-h-[100vh] pt-[100px] flex items-center bg-[#fff9f6]">
       {userData.role == "user" && <UserDashboard />}

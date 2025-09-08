@@ -4,17 +4,36 @@ import { FaLocationDot } from "react-icons/fa6";
 import { IoMdSearch } from "react-icons/io";
 import { IoCartOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
+import { RxCross2 } from "react-icons/rx";
 
 const Nav = () => {
-  const { userData } = useSelector((state) => state.user);
+  const { userData, city } = useSelector((state) => state.user);
   const [showInfo, setShowInfo] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   return (
     <div className="w-full h-[80px] flex items-center justify-between md:justify-center gap-[30px] px-[20px] fixed top-0 z-[9999] bg-[#fff9f6] overflow-visible">
+      {showSearch && (
+        <div className="w-[90%] h-[70px] bg-white shadow-xl rounded-lg items-center gap-[20px] flex top-[80px] left-[5%] fixed">
+          <div className=" flex items-center w-[30%] overflow-hidden gap-[10px] px-[10px] border-r-[2px] border-gray-400">
+            <FaLocationDot size={20} className="text-[#ff4d2d]" />
+            <div className="w-[80%] truncate text-gray-600">{city}</div>
+          </div>
+          <div className="flex items-center gap-[10px] w-[80%]">
+            <IoMdSearch size={25} className="text-[#ff4d2d]" />
+            <input
+              type="text"
+              placeholder="Search food..."
+              className="w-full px-[10px] text-gray-600 outline-0"
+            />
+          </div>
+        </div>
+      )}
+
       <h1 className="text-3xl font-bold mb-2 text-[#ff4d2d]">Noshly</h1>
-      <div className="md:w-[60%] lg:w-[40%] h-[70px] bg-white shadow-xl rounded-lg flex items-center gap-[20px]">
+      <div className="md:w-[60%] lg:w-[40%] h-[70px] bg-white shadow-xl rounded-lg items-center gap-[20px] hidden md:flex">
         <div className=" flex items-center w-[30%] overflow-hidden gap-[10px] px-[10px] border-r-[2px] border-gray-400">
           <FaLocationDot size={20} className="text-[#ff4d2d]" />
-          <div className="w-[80%] truncate text-gray-600">Delhi</div>
+          <div className="w-[80%] truncate text-gray-600">{city}</div>
         </div>
         <div className="flex items-center gap-[10px] w-[80%]">
           <IoMdSearch size={25} className="text-[#ff4d2d]" />
@@ -26,6 +45,20 @@ const Nav = () => {
         </div>
       </div>
       <div className="flex gap-[20px] items-center justify-center">
+        {showSearch ? (
+          <RxCross2
+            size={25}
+            className="text-[#ff4d2d] md:hidden cursor-pointer"
+            onClick={() => setShowSearch((prev) => !prev)}
+          />
+        ) : (
+          <IoMdSearch
+            size={25}
+            className="text-[#ff4d2d] md:hidden cursor-pointer"
+            onClick={() => setShowSearch((prev) => !prev)}
+          />
+        )}
+
         <div className="relative cursor-pointer">
           <IoCartOutline size={30} className="text-[#ff4d2d]" />
           <span className="absolute right-[-9px] top-[-12px] text-[#ff4d2d]">
