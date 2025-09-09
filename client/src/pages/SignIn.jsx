@@ -44,7 +44,6 @@ const SignIn = () => {
   };
 
   const handleGoogleAuth = async () => {
-    setLoding(true);
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     // console.log(result);
@@ -56,7 +55,6 @@ const SignIn = () => {
         },
         { withCredentials: true }
       );
-      setLoding(false);
       dispatch(setUserData(data));
       setErr("");
     } catch (error) {
@@ -152,13 +150,9 @@ const SignIn = () => {
           className="w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition duration-200 border-gray-400 hover:bg-gray-200 cursor-pointer"
           onClick={handleGoogleAuth}
         >
-          {loding ? (
-            <ClipLoader size={20} />
-          ) : (
-            <div className="flex items-center gap-2">
-              <FcGoogle size={20} /> <span>Sign in with Google</span>
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            <FcGoogle size={20} /> <span>Sign in with Google</span>
+          </div>
         </button>
         <p className="text-center mt-2">
           Create new account ?{" "}
