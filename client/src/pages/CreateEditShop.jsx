@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { setMyShopData } from "../redux/ownerSlice";
+import { HashLoader } from "react-spinners";
 
 const CreateEditShop = () => {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ const CreateEditShop = () => {
   const [state, setState] = useState(myShopData?.state || currentState);
   const [frontendImage, setFrontendImage] = useState(myShopData?.image || null);
   const [backendImage, setBackendImage] = useState(null);
+  const [loding, setLoding] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleImage = (e) => {
@@ -34,6 +37,7 @@ const CreateEditShop = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoding(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -48,12 +52,12 @@ const CreateEditShop = () => {
         formData,
         { withCredentials: true }
       );
-      console.log(result.data);
       dispatch(setMyShopData(result.data));
-      // navigate("/");
-      // console.log(result.data);
+      setLoding(false);
+      navigate("/");
     } catch (error) {
       console.log(error);
+      setLoding(false);
     }
   };
   return (
@@ -148,8 +152,11 @@ const CreateEditShop = () => {
               value={address}
             />
           </div>
-          <button className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md cursor-pointer hover:bg-orange-600 hover:shadow-lg transition-colors duration-200">
-            Save
+          <button
+            className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md cursor-pointer hover:bg-orange-600 hover:shadow-lg transition-colors duration-200"
+            disabled={loding}
+          >
+            {loding ? <HashLoader size={20} color="white" /> : "Save"}
           </button>
         </form>
       </div>

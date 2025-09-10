@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { setMyShopData } from "../redux/ownerSlice";
+import { HashLoader } from "react-spinners";
 
 const Additem = () => {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ const Additem = () => {
   const [backendImage, setBackendImage] = useState(null);
   const [category, setCategory] = useState("");
   const [foodType, setFoodType] = useState("veg");
+  const [loding, setLoding] = useState(false);
+
   const dispatch = useDispatch();
 
   const categories = [
@@ -45,6 +48,7 @@ const Additem = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoding(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -59,10 +63,14 @@ const Additem = () => {
         formData,
         { withCredentials: true }
       );
-      dispatch(setMyShopData(result.data));
       console.log(result.data);
+      dispatch(setMyShopData(result.data));
+      setLoding(false);
+
+      navigate("/");
     } catch (error) {
       console.log("add item fect error", error);
+      setLoding(false);
     }
   };
   return (
@@ -74,7 +82,7 @@ const Additem = () => {
           className="text-[#ff4d2d] cursor-pointer"
         />
       </div>
-      <div className="max-w-lg bg-white shadow-xl p-8 border border-orange-100 ">
+      <div className="w-lg max-w-lg bg-white shadow-xl p-8 border border-orange-100 ">
         <div className="flex flex-col items-center mb-6">
           <div className="bg-orange-100 p-4 rounded-full mb-4">
             <FaUtensils className="text-[#ff4d2d] w-16 h-16" />
@@ -155,12 +163,15 @@ const Additem = () => {
               value={foodType}
             >
               <option value="veg">veg</option>
-              <option value="non veg">non veg</option>
+              <option value="non-veg">non veg</option>
             </select>
           </div>
 
-          <button className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md cursor-pointer hover:bg-orange-600 hover:shadow-lg transition-colors duration-200">
-            Save
+          <button
+            className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md cursor-pointer hover:bg-orange-600 hover:shadow-lg transition-colors duration-200"
+            disabled={loding}
+          >
+            {loding ? <HashLoader color="white" size={20} /> : "Save"}
           </button>
         </form>
       </div>

@@ -7,7 +7,7 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
-import { ClipLoader } from "react-spinners";
+import { ClipLoader, HashLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice";
 
@@ -55,6 +55,7 @@ const SignIn = () => {
         },
         { withCredentials: true }
       );
+      // console.log(data);
       dispatch(setUserData(data));
       setErr("");
     } catch (error) {
@@ -143,7 +144,7 @@ const SignIn = () => {
           className={`w-full font-semibold py-2 rounded-lg transition duration-200 cursor-pointer bg-[#ff4d2d] text-white hover:bg-[#e64323]`}
           onClick={handleSignIn}
         >
-          {loding ? <ClipLoader size={20} /> : "Sign In"}
+          {loding ? <HashLoader size={20} /> : "Sign In"}
         </button>
         {err && <p className="text-red-500 text-center">*{err}*</p>}
         <button

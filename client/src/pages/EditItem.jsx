@@ -7,6 +7,7 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { setMyShopData } from "../redux/ownerSlice";
 import { useEffect } from "react";
+import { HashLoader } from "react-spinners";
 
 const EditItem = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const EditItem = () => {
   const [backendImage, setBackendImage] = useState(null);
   const [category, setCategory] = useState("");
   const [foodType, setFoodType] = useState("");
+  const [loding, setLoding] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -49,6 +51,7 @@ const EditItem = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoding(true);
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -59,21 +62,24 @@ const EditItem = () => {
         formData.append("image", backendImage);
       }
       const result = await axios.post(
-        `${serverUrl}/api/item/add-item`,
+        `${serverUrl}/api/item/edit-item/${itemId}`,
         formData,
         { withCredentials: true }
       );
+      // console.log(result.data);
       dispatch(setMyShopData(result.data));
-      console.log(result.data);
+      setLoding(false);
+      navigate("/");
     } catch (error) {
-      console.log("add item fect error", error);
+      console.log("edit item fect error", error);
+      setLoding(false);
     }
   };
 
   useEffect(() => {
     const fetchItemById = async () => {
       try {
-        console.log(itemId);
+        // console.log(itemId);
         const result = await axios.get(
           `${serverUrl}/api/item/get-item-by-id/${itemId}`,
           { withCredentials: true }
@@ -190,8 +196,11 @@ const EditItem = () => {
             </select>
           </div>
 
-          <button className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md cursor-pointer hover:bg-orange-600 hover:shadow-lg transition-colors duration-200">
-            Save
+          <button
+            className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md cursor-pointer hover:bg-orange-600 hover:shadow-lg transition-colors duration-200"
+            disabled={loding}
+          >
+            {loding ? <HashLoader color="white" size={20} /> : "Save"}
           </button>
         </form>
       </div>

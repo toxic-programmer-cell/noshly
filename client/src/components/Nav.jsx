@@ -10,12 +10,15 @@ import { serverUrl } from "../App";
 import { setUserData } from "../redux/userSlice";
 import { FiPlus } from "react-icons/fi";
 import { MdOutlinePendingActions } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const Nav = () => {
   const { userData, currentCity } = useSelector((state) => state.user);
   const { myShopData } = useSelector((state) => state.owner);
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
@@ -86,11 +89,17 @@ const Nav = () => {
           <>
             {myShopData && (
               <>
-                <button className="hidden md:flex items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d]">
+                <button
+                  className="hidden md:flex items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d]"
+                  onClick={() => navigate("/add-item")}
+                >
                   <FiPlus size={20} />
                   <span>Add Food Items</span>
                 </button>
-                <button className="flex md:hidden items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d]">
+                <button
+                  className="flex md:hidden items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d]"
+                  onClick={() => navigate("/add-item")}
+                >
                   <FiPlus size={20} />
                 </button>
               </>
@@ -134,9 +143,12 @@ const Nav = () => {
         {showInfo && (
           <div className="fixed top-[80px] right-[10px] md:right-[10%] lg:right-[25%] w-[180px] bg-white shadow-2xl rounded-xl p-[20px] flex flex-col gap-[10px] z-[9999]">
             <div className="text-[17px] font-semibold">{userData.fullName}</div>
-            <div className="text-[#ff4d2d] font-semibold cursor-pointer md:hidden">
-              My Orders
-            </div>
+            {userData.role === "user" && (
+              <div className="text-[#ff4d2d] font-semibold cursor-pointer md:hidden">
+                My Orders
+              </div>
+            )}
+
             <div
               className="text-[#ff4d2d] font-semibold cursor-pointer"
               onClick={handleLogout}
