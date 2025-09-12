@@ -1,6 +1,7 @@
 import React from "react";
 
 const CategoryCard = ({ data }) => {
+  console.log(data);
   return (
     <div className="w-[120px] h-[150px] md:w-[180px] rounded-2xl border-2 border-[#ff4d2d] shrink-0 overflow-hidden bg-white shadow-xl shadow-gray-200 hover:shadow-lg transition-shadow relative cursor-pointer">
       <img
