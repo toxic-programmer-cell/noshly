@@ -107,6 +107,7 @@ const UserDashboard = () => {
             </button>
           )}
         </div>
+
         <div className="w-full flex flex-col relative">
           <div className="mt-5 mb-2">
             <h2 className="text-gray-800 text-2xl sm:text-3xl font-semibold">
@@ -138,6 +139,8 @@ const UserDashboard = () => {
             </button>
           )}
         </div>
+
+        <div></div>
       </div>
     </div>
   );

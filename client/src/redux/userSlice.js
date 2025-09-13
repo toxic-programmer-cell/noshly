@@ -7,7 +7,7 @@ const userSlice = createSlice({
     currentCity: null,
     currentState: null,
     currentAddress: null,
-    shopsInMyCity: null,
+    shopsInMyCity: [],
   },
   reducers: {
     setUserData: (state, action) => {
