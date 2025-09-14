@@ -40,6 +40,7 @@ const UserDashboard = () => {
   };
 
   useEffect(() => {
+    if (!categoryScroll) return;
     if (categoryScroll.current && shopScrollRef.current) {
       const checkCategory = () =>
         handleShowButton(
@@ -65,7 +66,7 @@ const UserDashboard = () => {
         shopScrollRef.current.removeEventListener("scroll", checkShop);
       };
     }
-  }, [handleShowButton]);
+  }, []);
 
   return (
     <div className="w-screen min-h-screen flex flex-col gap-8 items-center bg-gradient-to-b from-green-50 via-white to-green-50 overflow-y-auto p-4">
@@ -77,7 +78,7 @@ const UserDashboard = () => {
           Inspiration for your first order
         </h1>
 
-        <div className="w-full relative bg-[#C4FBD9] rounded-xl py-3 px-1">
+        <div className="w-full relative bg-[#D3EEDD] rounded-xl py-3 px-1 hover:bg-green-300 transition-all duration-400">
           {showLeftCatButton && (
             <button
               className="absolute left-0 top-1/2 -translate-y-1/2 bg-green-600 text-white p-3 rounded-full shadow-xl hover:bg-green-700 hover:scale-110 transition-all z-10"
@@ -127,7 +128,7 @@ const UserDashboard = () => {
         )}
 
         <div
-          className="w-full flex overflow-x-auto gap-4 pb-2 whitespace-nowrap"
+          className="w-full flex overflow-x-auto gap-4 pb-2 whitespace-nowrap bg-[#D3EEDD] py-2 px-1 rounded-xl hover:bg-green-300 transition-all duration-400"
           ref={shopScrollRef}
         >
           {!shopsInMyCity || shopsInMyCity.length === 0
@@ -153,7 +154,7 @@ const UserDashboard = () => {
           Food in your city
         </h2>
 
-        <div className="w-full flex flex-wrap gap-4 pb-2 items-center justify-center">
+        <div className="w-full flex flex-wrap gap-4 pb-2 items-center justify-center bg-[#D3EEDD] py-2 px-1 rounded-xl hover:bg-green-300 transition-all duration-400">
           {!itemInMyCity || itemInMyCity.length === 0
             ? Array.from({ length: 6 }).map((_, i) => <ShimmerCards key={i} />)
             : itemInMyCity.map((item) => (

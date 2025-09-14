@@ -10,7 +10,7 @@ function useGetShopByCity() {
   useEffect(() => {
     const fetchShops = async () => {
       try {
-        console.log(currentCity);
+        // console.log(currentCity);
         if (!currentCity) return;
         const result = await axios.get(
           `${serverUrl}/api/shop/get-by-city/${currentCity}`,
@@ -18,7 +18,7 @@ function useGetShopByCity() {
             withCredentials: true,
           }
         );
-        console.log(result.data);
+        // console.log(result.data);
         dispatch(setShopsInMyCity(result.data));
       } catch (error) {
         console.log(error);

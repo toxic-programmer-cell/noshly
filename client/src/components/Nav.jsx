@@ -11,6 +11,7 @@ import { setUserData } from "../redux/userSlice";
 import { FiPlus } from "react-icons/fi";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { FaUtensils } from "react-icons/fa";
 
 const Nav = () => {
   const { userData, currentCity } = useSelector((state) => state.user);
@@ -27,6 +28,7 @@ const Nav = () => {
         withCredentials: true,
       });
       dispatch(setUserData(null));
+      navigate("/signin");
     } catch (error) {
       console.log(error);
     }
@@ -36,11 +38,11 @@ const Nav = () => {
       {showSearch && userData.role == "user" && (
         <div className="w-[90%] h-[70px] bg-white shadow-xl rounded-lg items-center gap-[20px] flex top-[80px] left-[5%] fixed">
           <div className=" flex items-center w-[30%] overflow-hidden gap-[10px] px-[10px] border-r-[2px] border-gray-400">
-            <FaLocationDot size={20} className="text-[#ff4d2d]" />
+            <FaLocationDot size={20} className="text-green-600" />
             <div className="w-[80%] truncate text-gray-600">{currentCity}</div>
           </div>
           <div className="flex items-center gap-[10px] w-[80%]">
-            <IoMdSearch size={25} className="text-[#ff4d2d]" />
+            <IoMdSearch size={25} className="text-green-600" />
             <input
               type="text"
               placeholder="Search food..."
@@ -50,16 +52,27 @@ const Nav = () => {
         </div>
       )}
 
-      <h1 className="text-3xl font-bold mb-2 text-[#ff4d2d]">Noshly</h1>
+      {/* <h1 className="text-3xl font-bold mb-2 text-green-600">Noshly</h1> */}
+      <div className="flex items-center gap-2 h-full">
+        {/* Icon */}
+        <div className="p-2 bg-green-100 rounded-full shadow-md">
+          <FaUtensils className="text-green-600 w-5 h-5" />
+        </div>
+
+        {/* Text */}
+        <h1 className="text-2xl sm:text-3xl font-extrabold mb-2 bg-gradient-to-r from-green-400 via-green-500 to-green-700 text-transparent bg-clip-text  drop-shadow-md">
+          Noshly
+        </h1>
+      </div>
 
       {userData.role == "user" && (
         <div className="md:w-[60%] lg:w-[40%] h-[70px] bg-white shadow-xl rounded-lg items-center gap-[20px] hidden md:flex">
           <div className=" flex items-center w-[30%] overflow-hidden gap-[10px] px-[10px] border-r-[2px] border-gray-400">
-            <FaLocationDot size={20} className="text-[#ff4d2d]" />
+            <FaLocationDot size={20} className="text-green-600" />
             <div className="w-[80%] truncate text-gray-600">{currentCity}</div>
           </div>
           <div className="flex items-center gap-[10px] w-[80%]">
-            <IoMdSearch size={25} className="text-[#ff4d2d]" />
+            <IoMdSearch size={25} className="text-green-600" />
             <input
               type="text"
               placeholder="Search food..."
@@ -74,13 +87,13 @@ const Nav = () => {
           (showSearch ? (
             <RxCross2
               size={25}
-              className="text-[#ff4d2d] md:hidden cursor-pointer"
+              className="text-green-600 md:hidden cursor-pointer"
               onClick={() => setShowSearch((prev) => !prev)}
             />
           ) : (
             <IoMdSearch
               size={25}
-              className="text-[#ff4d2d] md:hidden cursor-pointer"
+              className="text-green-600 md:hidden cursor-pointer"
               onClick={() => setShowSearch((prev) => !prev)}
             />
           ))}
@@ -90,14 +103,14 @@ const Nav = () => {
             {myShopData && (
               <>
                 <button
-                  className="hidden md:flex items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d]"
+                  className="hidden md:flex items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-green-600"
                   onClick={() => navigate("/add-item")}
                 >
                   <FiPlus size={20} />
                   <span>Add Food Items</span>
                 </button>
                 <button
-                  className="flex md:hidden items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d]"
+                  className="flex md:hidden items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-green-600"
                   onClick={() => navigate("/add-item")}
                 >
                   <FiPlus size={20} />
@@ -105,16 +118,16 @@ const Nav = () => {
               </>
             )}
 
-            <div className="hidden md:flex items-center gap-2 relative px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] font-medium">
+            <div className="hidden md:flex items-center gap-2 relative px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-green-600 font-medium">
               <MdOutlinePendingActions size={20} />
               <span>My Orders</span>
-              <span className="absolute -right-2 -top-2 text-xs font-bold text-white bg-[#ff4d2d] rounded-full px-[6px] py-[1px]">
+              <span className="absolute -right-2 -top-2 text-xs font-bold text-white bg-green-600 rounded-full px-[6px] py-[1px]">
                 0
               </span>
             </div>
-            <div className="md:hidden flex items-center gap-2 relative px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] font-medium">
+            <div className="md:hidden flex items-center gap-2 relative px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-green-600 font-medium">
               <MdOutlinePendingActions size={20} />
-              <span className="absolute -right-2 -top-2 text-xs font-bold text-white bg-[#ff4d2d] rounded-full px-[6px] py-[1px]">
+              <span className="absolute -right-2 -top-2 text-xs font-bold text-white bg-green-600rounded-full px-[6px] py-[1px]">
                 0
               </span>
             </div>
@@ -122,20 +135,20 @@ const Nav = () => {
         ) : (
           <>
             <div className="relative cursor-pointer">
-              <IoCartOutline size={30} className="text-[#ff4d2d]" />
-              <span className="absolute right-[-9px] top-[-12px] text-[#ff4d2d]">
+              <IoCartOutline size={30} className="text-green-600" />
+              <span className="absolute right-[-9px] top-[-12px] text-green-600">
                 0
               </span>
             </div>
 
-            <button className="hidden md:block px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium">
+            <button className="hidden md:block px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-green-600 text-sm font-semibold">
               My Orders
             </button>
           </>
         )}
 
         <div
-          className="w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#ff4d2d] text-white text-[18px] shadow-xl font-semibold  cursor-pointer uppercase"
+          className="w-[40px] h-[40px] rounded-full flex items-center justify-center bg-green-600 text-white text-[18px] shadow-xl font-semibold  cursor-pointer uppercase"
           onClick={() => setShowInfo((prev) => !prev)}
         >
           {userData.fullName.slice(0, 1)}

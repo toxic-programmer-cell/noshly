@@ -16,7 +16,7 @@ const OwnerDashboard = () => {
         <div className="flex items-center justify-center p-4 sm:p-6">
           <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-300">
             <div className="flex flex-col items-center justify-center">
-              <FaUtensils className="text-[#ff4d2d] w-16 h-16 sm:w-20 sm:h-20 mb-4" />
+              <FaUtensils className="text-green-600 w-16 h-16 sm:w-20 sm:h-20 mb-4" />
               <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
                 Add Your Restaurant
               </h2>
@@ -25,7 +25,7 @@ const OwnerDashboard = () => {
                 customer every day
               </p>
               <button
-                className="bg-[#ff4d2d] text-white px-5 sm-px-6 py-2 rounded-full font-medium shadow-md hover:bg-orange-600 transition-colors duration-200 cursor-pointer"
+                className="bg-green-500 text-white px-5 sm-px-6 py-2 rounded-full font-medium shadow-md hover:bg-green-600 transition-colors duration-200 cursor-pointer"
                 onClick={() => navigate("/create-edit-shope")}
               >
                 Get Started
@@ -37,13 +37,13 @@ const OwnerDashboard = () => {
       {myShopData && (
         <div className="w-full flex flex-col items-center gap-6 px-4 sm:px-6">
           <h1 className="text-2xl sm:text-3xl text-gray-900 flex items-center gap-3 mt-8 text-center">
-            <FaUtensils className="text-[#ff4d2d] w-14 h-14" />
+            <FaUtensils className="text-green-600 w-14 h-14" />
             Welcome to {myShopData.name}
           </h1>
 
           <div className=" bg-white shadow-lg rounded-xl overflow-hidden border border-orange-100 hover:shadow-2xl transition-all duration-300 w-full max-w-3xl relative">
             <div
-              className="absolute top-4 right-4 bg-[#ff4d2d] text-white p-2 rounded-full shadow-md hover:bg-orange-600 transition-colors cursor-pointer"
+              className="absolute top-4 right-4 bg-green-500 text-white p-2 rounded-full shadow-md hover:bg-green-600 transition-colors cursor-pointer"
               onClick={() => navigate("/create-edit-shope")}
             >
               <FaPen size={20} />
@@ -66,7 +66,7 @@ const OwnerDashboard = () => {
             <div className="flex items-center justify-center p-4 sm:p-6">
               <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-300">
                 <div className="flex flex-col items-center justify-center">
-                  <FaUtensils className="text-[#ff4d2d] w-16 h-16 sm:w-20 sm:h-20 mb-4" />
+                  <FaUtensils className="text-green-600 w-16 h-16 sm:w-20 sm:h-20 mb-4" />
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
                     Add Your Food Items
                   </h2>
@@ -75,7 +75,7 @@ const OwnerDashboard = () => {
                     them to menu
                   </p>
                   <button
-                    className="bg-[#ff4d2d] text-white px-5 sm-px-6 py-2 rounded-full font-medium shadow-md hover:bg-orange-600 transition-colors duration-200 cursor-pointer"
+                    className="bg-green-500 text-white px-5 sm-px-6 py-2 rounded-full font-medium shadow-md hover:bg-green-600 transition-colors duration-200 cursor-pointer"
                     onClick={() => navigate("/add-item")}
                   >
                     Add Food
