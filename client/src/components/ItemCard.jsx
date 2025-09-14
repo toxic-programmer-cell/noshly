@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiShoppingCart, FiHeart } from "react-icons/fi";
 import { FaLeaf } from "react-icons/fa";
 import { GiChickenLeg } from "react-icons/gi";
@@ -13,14 +13,33 @@ const ItemCard = ({ data }) => {
   const { category, foodType, name, price, image, rating } = data;
   const { cartItems } = useSelector((state) => state.user);
 
-  const [quentity, setQuentity] = useState(
-    cartItems.find((i) => i.id === data._id)?.quentity || 0
-  );
+  const [quentity, setQuentity] = useState(0);
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const existingItem = cartItems.find((i) => i.id === data._id);
+    setQuentity(existingItem?.quentity || 0);
+  }, [cartItems, data._id]);
+
   const handleDecrease = () => setQuentity((prev) => (prev > 0 ? prev - 1 : 0));
   const handleIncrease = () => setQuentity((prev) => prev + 1);
+
+  const handleAddToCart = () => {
+    if (quentity > 0) {
+      dispatch(
+        addToCart({
+          id: data._id,
+          name: data.name,
+          image: data.image,
+          price: data.price,
+          foodType: data.foodType,
+          quentity,
+          shop: data.shop,
+        })
+      );
+    }
+  };
 
   const renderRating = (rating) => {
     const stars = [];
@@ -103,18 +122,9 @@ const ItemCard = ({ data }) => {
           </button>
         </div>
         <button
-          onClick={() =>
-            dispatch(
-              addToCart({
-                id: data._id,
-                name: data.name,
-                image: data.image,
-                price: data.price,
-                foodType: data.foodType,
-                quentity,
-                shop: data.shop,
-              })
-            )
+          onClick={
+            handleAddToCart
+            // setQuentity(cartItems.find((i) => i.id === data._id)?.quentity || 0)
           }
           className={`flex items-center gap-2 text-white font-semibold px-5 py-2 rounded-full shadow-lg transition-colors cursor-pointer ${
             cartItems.some((i) => i.id === data._id)
