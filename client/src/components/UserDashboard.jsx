@@ -66,7 +66,7 @@ const UserDashboard = () => {
         shopScrollRef.current.removeEventListener("scroll", checkShop);
       };
     }
-  }, []);
+  }, [handleShowButton]);
 
   return (
     <div className="w-screen min-h-screen flex flex-col gap-8 items-center bg-gradient-to-b from-green-50 via-white to-green-50 overflow-y-auto p-4">
