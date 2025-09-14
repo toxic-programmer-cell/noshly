@@ -4,19 +4,22 @@ import { FaLeaf } from "react-icons/fa";
 import { GiChickenLeg } from "react-icons/gi";
 import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/userSlice";
 import { FaMinusCircle } from "react-icons/fa";
 import { FaPlusCircle } from "react-icons/fa";
 
 const ItemCard = ({ data }) => {
   const { category, foodType, name, price, image, rating } = data;
+  const { cartItems } = useSelector((state) => state.user);
 
-  const [quentity, setQuentity] = useState(1);
+  const [quentity, setQuentity] = useState(
+    cartItems.find((i) => i.id === data._id)?.quentity || 0
+  );
 
   const dispatch = useDispatch();
 
-  const handleDecrease = () => setQuentity((prev) => (prev > 1 ? prev - 1 : 1));
+  const handleDecrease = () => setQuentity((prev) => (prev > 0 ? prev - 1 : 0));
   const handleIncrease = () => setQuentity((prev) => prev + 1);
 
   const renderRating = (rating) => {
@@ -42,7 +45,7 @@ const ItemCard = ({ data }) => {
     );
 
   return (
-    <div className="w-[200px] md:w-[240px] rounded-3xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 relative cursor-pointer group">
+    <div className="w-[200px] md:w-[240px] rounded-3xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 relative group">
       {/* Image + Icons */}
       <div className="relative h-[140px] md:h-[160px] overflow-hidden">
         <img
@@ -87,14 +90,14 @@ const ItemCard = ({ data }) => {
         <div className="flex items-center bg-white rounded-full gap-3 mt-3">
           <button
             onClick={handleDecrease}
-            className="px-3 py-1 rounded-full font-bold hover:bg-gray-300"
+            className="px-3 py-1 rounded-full font-bold hover:bg-gray-300 cursor-pointer"
           >
             <FaMinusCircle className="text-green-600 text-2xl" />
           </button>
           <span className="font-semibold">{quentity}</span>
           <button
             onClick={handleIncrease}
-            className="px-3 py-1 rounded-full font-bold hover:bg-gray-300"
+            className="px-3 py-1 rounded-full font-bold hover:bg-gray-300 cursor-pointer"
           >
             <FaPlusCircle className="text-green-600 text-2xl" />
           </button>
@@ -113,7 +116,11 @@ const ItemCard = ({ data }) => {
               })
             )
           }
-          className="flex items-center gap-2 bg-green-600 text-white font-semibold px-5 py-2 rounded-full shadow-lg hover:bg-green-700 transition-colors"
+          className={`flex items-center gap-2 text-white font-semibold px-5 py-2 rounded-full shadow-lg transition-colors cursor-pointer ${
+            cartItems.some((i) => i.id === data._id)
+              ? "bg-gray-500 hover:bg-gray-600"
+              : "bg-green-600 hover:bg-green-700"
+          }`}
         >
           <FiShoppingCart size={18} />
           Add to Cart

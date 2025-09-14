@@ -40,7 +40,8 @@ const UserDashboard = () => {
   };
 
   useEffect(() => {
-    if (!categoryScroll) return;
+    if (!categoryScroll.current) return;
+
     if (categoryScroll.current && shopScrollRef.current) {
       const checkCategory = () =>
         handleShowButton(
@@ -58,15 +59,18 @@ const UserDashboard = () => {
       checkCategory();
       checkShop();
 
-      categoryScroll.current.addEventListener("scroll", checkCategory);
-      shopScrollRef.current.addEventListener("scroll", checkShop);
+      const catEl = categoryScroll.current;
+      const shopEl = shopScrollRef.current;
+
+      catEl.addEventListener("scroll", checkCategory);
+      shopEl.addEventListener("scroll", checkShop);
 
       return () => {
-        categoryScroll.current.removeEventListener("scroll", checkCategory);
-        shopScrollRef.current.removeEventListener("scroll", checkShop);
+        if (catEl) catEl.removeEventListener("scroll", checkCategory);
+        if (shopEl) shopEl.removeEventListener("scroll", checkShop);
       };
     }
-  }, [handleShowButton]);
+  }, []);
 
   return (
     <div className="w-screen min-h-screen flex flex-col gap-8 items-center bg-gradient-to-b from-green-50 via-white to-green-50 overflow-y-auto p-4">

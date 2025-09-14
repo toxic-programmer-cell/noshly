@@ -14,7 +14,9 @@ import { useNavigate } from "react-router-dom";
 import { FaUtensils } from "react-icons/fa";
 
 const Nav = () => {
-  const { userData, currentCity } = useSelector((state) => state.user);
+  const { userData, currentCity, cartItems } = useSelector(
+    (state) => state.user
+  );
   const { myShopData } = useSelector((state) => state.owner);
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -135,9 +137,13 @@ const Nav = () => {
         ) : (
           <>
             <div className="relative cursor-pointer">
-              <IoCartOutline size={30} className="text-green-600" />
-              <span className="absolute right-[-9px] top-[-12px] text-green-600">
-                0
+              <IoCartOutline
+                size={30}
+                className="text-green-600"
+                onClick={() => navigate("/cart")}
+              />
+              <span className="absolute right-[-9px] top-[-12px] text-green-600 ">
+                {cartItems.length}
               </span>
             </div>
 
