@@ -36,8 +36,18 @@ const userSlice = createSlice({
       if (existingItem) {
         existingItem.quentity += cartItem.quentity || 1;
       } else {
-        state.cartItems.push({ ...cartItem, quentity: 1 });
+        state.cartItems.push({ ...cartItem });
       }
+    },
+    updateQuantity: (state, action) => {
+      const { id, quentity } = action.payload;
+      const item = state.cartItems.find((i) => i.id == id);
+      if (item) {
+        item.quentity = quentity;
+      }
+    },
+    removeCartItem: (state, action) => {
+      state.cartItems = state.cartItems.filter((i) => i.id !== action.payload);
     },
   },
 });
@@ -50,5 +60,7 @@ export const {
   setShopsInMyCity,
   setItemInMyCity,
   addToCart,
+  updateQuantity,
+  removeCartItem,
 } = userSlice.actions;
 export default userSlice.reducer;

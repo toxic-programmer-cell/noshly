@@ -64,13 +64,13 @@ const ItemCard = ({ data }) => {
     );
 
   return (
-    <div className="w-[200px] md:w-[240px] rounded-3xl overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-shadow duration-300 relative group">
+    <div className="w-[200px] md:w-[240px] rounded-3xl overflow-hidden bg-white shadow-xl/30 hover:shadow-2xl transition-shadow duration-300 relative group ">
       {/* Image + Icons */}
       <div className="relative h-[140px] md:h-[160px] overflow-hidden">
         <img
           src={image || "/placeholder.jpg"}
           alt={name}
-          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500 loding:lazy"
         />
 
         {/* FoodType Icon */}
