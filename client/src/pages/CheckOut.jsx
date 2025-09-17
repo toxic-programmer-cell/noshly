@@ -31,6 +31,7 @@ function CheckOut() {
               type="text"
               className="flex-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-600 p-2 "
               placeholder="Enter your delivery address"
+              value={address}
             />
             <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg flex items-center justify-center cursor-pointer">
               <IoSearchSharp size={20} />
@@ -45,6 +46,7 @@ function CheckOut() {
                 className={"w-full h-full"}
                 center={[location.lat, location.lon]}
                 style={{ height: "100%", width: "100%" }}
+                zoom={16}
               >
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
