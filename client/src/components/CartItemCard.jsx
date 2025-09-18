@@ -55,9 +55,9 @@ const CartItemCard = ({ data }) => {
 
         {/* Buttons */}
         <div className="flex gap-3">
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition">
+          {/* <button className="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition">
             Place Order
-          </button>
+          </button> */}
           <button
             className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
             onClick={() => dispatch(removeCartItem(data.id))}

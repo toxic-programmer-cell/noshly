@@ -9,6 +9,9 @@ import "leaflet/dist/leaflet.css";
 import { setAddress, setLocation } from "../redux/mapSlice";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { MdDeliveryDining } from "react-icons/md";
+import { FaMobileScreen } from "react-icons/fa6";
+import { FaCreditCard } from "react-icons/fa";
 
 function RecenterMap({ location }) {
   const map = useMap();
@@ -17,9 +20,20 @@ function RecenterMap({ location }) {
 
 function CheckOut() {
   const [addressInput, setAddressInput] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("cod");
+
   const { location, address } = useSelector((state) => state.map);
+  const { cartItems } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const totalAmount = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quentity,
+    0
+  );
+
+  const deliveryCharge = totalAmount > 500 ? 0 : 50;
+  const amountWithDelivery = totalAmount + deliveryCharge;
 
   const apiKey = import.meta.env.VITE_GEOAPIKEY;
 
@@ -29,6 +43,7 @@ function CheckOut() {
     dispatch(setLocation({ lat, lon: lng }));
     getLocationByLatLon(lat, lng);
   };
+
   const getLocationByLatLon = async (latitude, longitude) => {
     try {
       const result = await axios.get(
@@ -57,7 +72,7 @@ function CheckOut() {
           addressInput
         )}&apiKey=${apiKey}`
       );
-      console.log(result.data.features[0].properties);
+      // console.log(result.data.features[0].properties);
       const { lat, lon } = result.data.features[0].properties;
       dispatch(setLocation({ lat, lon }));
       dispatch(setAddress(addressInput));
@@ -129,6 +144,92 @@ function CheckOut() {
             </div>
           </div>
         </section>
+
+        <section>
+          <h2 className="text-lg font-semibold mb-3 text-gray-800">
+            Payment Method
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div
+              className={`flex items-center gap-3 rounded-xl border p-4 text-left transition ${
+                paymentMethod === "cod"
+                  ? "border-green-600 bg-orange-50 shadow"
+                  : "border-gray-200 hover:border-gray-300"
+              }`}
+              onClick={() => setPaymentMethod("cod")}
+            >
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-100">
+                <MdDeliveryDining
+                  size={20}
+                  className="text-green-600 text-xl"
+                />
+              </span>
+              <div>
+                <p className="font-medium text-gray-800">Cash on Delivery</p>
+                <p className="text-xs text-gray-500">Pay when food arrives</p>
+              </div>
+            </div>
+
+            <div
+              className={`flex items-center gap-3 rounded-xl border p-4 text-left transition ${
+                paymentMethod === "online"
+                  ? "border-green-600 bg-orange-50 shadow"
+                  : "border-gray-200 hover:border-gray-300"
+              }`}
+              onClick={() => setPaymentMethod("online")}
+            >
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-purple-100">
+                <FaMobileScreen size={20} className="text-purple-600 text-xl" />
+              </span>
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-purple-100">
+                <FaCreditCard size={20} className="text-blue-600 text-xl" />
+              </span>
+              <div>
+                <p className="font-medium text-gray-800">
+                  UPI / Credit / Debit Card
+                </p>
+                <p className="text-xs text-gray-500">Pay securly online</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-semibold mb-3 text-gray-800">
+            Order Summary
+          </h2>
+          <div className="rounded-xl border p-4 space-y-2 bg-gray-50">
+            {cartItems.map((item, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center text-gray-900"
+              >
+                <span>
+                  {item.name} x {item.quentity}
+                </span>
+                <span>₹{item.price * item.quentity}</span>
+              </div>
+            ))}
+            <hr className="my-2 border-gray-200" />
+            <div className="flex justify-between items-center text-gray-900 font-semibold">
+              <span>SubTotal</span>
+              <span>₹{totalAmount}</span>
+            </div>
+            <div className="flex justify-between items-center text-gray-900">
+              <span>Delivery Charge</span>
+              <span>{deliveryCharge == 0 ? "Free" : `₹${deliveryCharge}`}</span>
+            </div>
+            <div className="flex justify-between items-center font-bold text-orange-600">
+              <span>Total</span>
+              <span>₹{amountWithDelivery}</span>
+            </div>
+          </div>
+        </section>
+
+        <button className="cursor-pointer w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold shadow-md transition">
+          {paymentMethod == "cod" ? "Place Order" : "Pay & Place Order"}
+        </button>
       </div>
     </div>
   );
