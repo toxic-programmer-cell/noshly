@@ -14,7 +14,7 @@ import useGetShopByCity from "./hooks/useGetShopByCity";
 import useGetItemByCity from "./hooks/useGetItemByCity";
 import CartPage from "./pages/CartPage";
 import CheckOut from "./pages/CheckOut";
-export const serverUrl = "https://noshly-backend.onrender.com";
+export const serverUrl = "http://localhost:8000";
 
 function App() {
   useGetCurrentUser();

@@ -17,7 +17,6 @@ const allowedOrigins = [
   "https://toxic-programmer-cell.github.io",
 ];
 app.use(
-  "*",
   cors({
     origin: allowedOrigins,
     credentials: true,
