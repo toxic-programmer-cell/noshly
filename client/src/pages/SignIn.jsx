@@ -37,6 +37,7 @@ const SignIn = () => {
       setLoding(false);
       dispatch(setUserData(result.data));
       setErr("");
+      navigate("/");
     } catch (error) {
       setLoding(false);
       setErr(error?.response?.data?.message);
@@ -58,6 +59,7 @@ const SignIn = () => {
       // console.log(data);
       dispatch(setUserData(data));
       setErr("");
+      navigate("/");
     } catch (error) {
       if (error.code === "auth/popup-closed-by-user") {
         setErr("You closed the Google login popup before finishing.");

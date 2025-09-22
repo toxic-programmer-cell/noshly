@@ -34,9 +34,9 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    paymentMethods: {
+    paymentMethod: {
       type: String,
-      enum: ["card", "online"],
+      enum: ["cod", "online"],
       required: true,
     },
     deliveryAddress: {
@@ -47,7 +47,7 @@ const orderSchema = new mongoose.Schema(
     totalAmount: {
       type: Number,
     },
-    shopOrder: [shopOrderSchema],
+    shopOrders: [shopOrderSchema],
   },
   { timestamps: true }
 );

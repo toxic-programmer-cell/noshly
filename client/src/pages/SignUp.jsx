@@ -45,6 +45,7 @@ const SignUp = () => {
       setLoding(false);
       dispatch(setUserData(result.data));
       setErr("");
+      navigate("/signin");
     } catch (error) {
       setLoding(false);
       setErr(error?.response?.data?.message);
